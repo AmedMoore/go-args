@@ -36,6 +36,9 @@ package args
 	meaning if your command was "myapp --my-arg val0 --my-arg val1 --my-arg val2"
 	parser.GetString("--my-arg") will return "val2"
 
+	GetString() allow alternative names lookup, example:
+	parser.GetString("--help", "-h")
+
 	If your program allow passing multiple values to the same argument use
 	parser.Get("--my-arg")
 	this will return a slice that includes all values for the argument "--my-arg"
@@ -199,13 +202,20 @@ func (p *ArgsParser) Args() []map[string]string {
 //			print(name)
 //		}
 //
+// Get() allow alternative names lookup, example:
+//
+//		names := parser.Get("--name", "-n")
+//
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) Get(name string) []string {
+func (p *ArgsParser) Get(name string, alts ...string) []string {
+	names := append(alts, name)
 	args := make([]string, 0)
-	for _, arg := range p.args {
-		k, v := p.firstPair(arg)
-		if k == name {
-			args = append(args, v)
+	for _, name := range names {
+		for _, arg := range p.args {
+			k, v := p.firstPair(arg)
+			if k == name {
+				args = append(args, v)
+			}
 		}
 	}
 	return args
@@ -222,12 +232,19 @@ func (p *ArgsParser) Get(name string) []string {
 //		name := parser.GetString("--name")
 //		print(name) // baz
 //
+// GetString() allow alternative names lookup, example:
+//
+//		names := parser.GetString("--name", "-n")
+//
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) GetString(name string) (string, bool) {
+func (p *ArgsParser) GetString(name string, alts ...string) (string, bool) {
+	names := append(alts, name)
 	for i := len(p.args) - 1; i >= 0; i-- {
-		k, v := p.firstPair(p.args[i])
-		if k == name {
-			return v, true
+		for _, name := range names {
+			k, v := p.firstPair(p.args[i])
+			if k == name {
+				return v, true
+			}
 		}
 	}
 	return "", false

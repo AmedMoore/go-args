@@ -90,6 +90,12 @@ func Test_ArgsParser_Parse(t *testing.T) {
 	if len(args1) != 2 || args1[0] != "val1" || args1[1] != "val4" {
 		t.Errorf("parser.Get(\"--args1\") = \"%s\"; want [\"val1\", \"val4\"]", args1)
 	}
+
+	// test alternative names lookup
+	alt, exists := parser.GetString("--missing", "-g")
+	if !exists || alt != "val0" {
+		t.Errorf("parser.GetString(\"--missing\", \"-g\") = \"%s\"; want \"val0\"", alt)
+	}
 }
 
 func Benchmark_ArgsParser_Parse(b *testing.B) {

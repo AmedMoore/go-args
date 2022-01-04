@@ -85,12 +85,40 @@ and `-a val`, and `--arg val` represents arguments with value.
 
 One or two minus signs (hyphens) may be used; they are equivalent.
 
+## Testing
+
+- On Windows:
+
+  ```console
+  $ go test -bench .
+  goos: windows
+  goarch: amd64
+  pkg: github.com/akaahmedkamal/go-args
+  cpu: Intel(R) Core(TM) i7-10870H CPU @ 2.20GHz
+  Benchmark_ArgsParser_Parse-16           1000000000
+  PASS
+  ok      github.com/akaahmedkamal/go-args        0.025s
+  ```
+
+- On Mac:
+
+  ```console
+  $ go test -bench .
+  goos: darwin
+  goarch: arm64
+  pkg: github.com/akaahmedkamal/go-args
+  Benchmark_ArgsParser_Parse-8      1000000000      0.0000110 ns/op
+  PASS
+  ok      github.com/akaahmedkamal/go-args        0.729s
+  ```
+
 ## TODO
 
 - [ ] Better error handling.
 - [ ] Support for the (`--arg=val`) syntax.
 - [ ] Support for the Windows (`/opt`, `/arg val`, and `/arg=val`) syntax.
 - [ ] Maybe add auto-cast for argument values? like `GetString() string`, `GetInt() int`, and `GetBool() bool`, etc...
+- [x] Allow alternative names lookup in argument accessor functions (i.e. `GetString("-h", "--help")`)
 
 ## License
 
