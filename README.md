@@ -119,6 +119,7 @@ One or two minus signs (hyphens) may be used; they are equivalent.
 - [ ] Support for the Windows (`/opt`, `/arg val`, and `/arg=val`) syntax.
 - [ ] Maybe add auto-cast for argument values? like `GetString() string`, `GetInt() int`, and `GetBool() bool`, etc...
 - [x] Allow alternative names lookup in argument accessor functions (i.e. `GetString("-h", "--help")`)
+- [x] Add type alias `Parser` for the struct `ArgsParser`.
 
 ## License
 

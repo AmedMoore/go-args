@@ -75,6 +75,9 @@ type ArgsParser struct {
 	args       []map[string]string
 }
 
+// Parser is a type alias for `ArgsParser`.
+type Parser = ArgsParser
+
 // NewParser constructs a new ArgsParser struct
 // and returns a pointer to it.
 //
