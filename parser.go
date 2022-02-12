@@ -7,7 +7,7 @@ package args
 
 	Construct a new parser using args.NewParser()
 
-	This constructs a new ArgsParser struct and returns a pointer to it:
+	This constructs a new Parser struct and returns a pointer to it:
 		import "github.com/akaahmedkamal/go-args"
 		parser := args.NewParser()
 	You can pass the arguments slice to be parsed to this function.
@@ -60,25 +60,22 @@ package args
 	One or two minus signs (hyphens) may be used; they are equivalent.
 */
 
-// FLAG_PREFIX defines the special character used to indicate
+// FlagPrefix defines the special character used to indicate
 // that this arg is a flag, we use this instead of a hard coded
 // value to make it easier if we want to support platform-specific
-// syntax in the future (i.e the /arg syntax in Windows).
-const FLAG_PREFIX = '-'
+// syntax in the future (i.e. the /arg syntax in Windows).
+const FlagPrefix = '-'
 
-// ArgsParser is the main struct that does
+// Parser is the main struct that does
 // the parsing and hold the results.
-type ArgsParser struct {
+type Parser struct {
 	rawArgs    []string
 	positional []string
 	options    []string
 	args       []map[string]string
 }
 
-// Parser is a type alias for `ArgsParser`.
-type Parser = ArgsParser
-
-// NewParser constructs a new ArgsParser struct
+// NewParser constructs a new Parser struct
 // and returns a pointer to it.
 //
 // Optionally you can pass the arguments slice
@@ -88,12 +85,12 @@ type Parser = ArgsParser
 //
 // Please note that you have to pass the arguments
 // slice to either this or the `Parse()` function.
-func NewParser(args ...[]string) *ArgsParser {
+func NewParser(args ...[]string) *Parser {
 	var rawArgs []string
 	if len(args) > 0 {
 		rawArgs = args[0]
 	}
-	return &ArgsParser{rawArgs: rawArgs}
+	return &Parser{rawArgs: rawArgs}
 }
 
 // Parse parses the command-line arguments and store,
@@ -110,7 +107,7 @@ func NewParser(args ...[]string) *ArgsParser {
 // with initial arguments, like:
 //
 //		parser := args.NewParser(os.Args[1:])
-func (p *ArgsParser) Parse(args ...[]string) error {
+func (p *Parser) Parse(args ...[]string) error {
 	if len(args) > 0 && len(p.rawArgs) == 0 {
 		p.rawArgs = args[0]
 	}
@@ -124,12 +121,12 @@ func (p *ArgsParser) Parse(args ...[]string) error {
 			continue
 		}
 
-		if (arg[0] != FLAG_PREFIX && im1 <= 0) || (arg[0] != FLAG_PREFIX && im1 > 0 && p.rawArgs[im1][0] != FLAG_PREFIX) {
+		if (arg[0] != FlagPrefix && im1 <= 0) || (arg[0] != FlagPrefix && im1 > 0 && p.rawArgs[im1][0] != FlagPrefix) {
 			p.positional = append(p.positional, arg)
 			continue
 		}
 
-		if arg[0] == FLAG_PREFIX && ip1 < len(p.rawArgs) && p.rawArgs[ip1][0] != FLAG_PREFIX {
+		if arg[0] == FlagPrefix && ip1 < len(p.rawArgs) && p.rawArgs[ip1][0] != FlagPrefix {
 			p.args = append(p.args, map[string]string{arg: p.rawArgs[ip1]})
 			i++
 			continue
@@ -145,7 +142,7 @@ func (p *ArgsParser) Parse(args ...[]string) error {
 // the form of string-slice.
 //
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) Positional() []string {
+func (p *Parser) Positional() []string {
 	return p.positional
 }
 
@@ -157,7 +154,7 @@ func (p *ArgsParser) Positional() []string {
 // return value will be an empty string.
 //
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) At(index int) (string, bool) {
+func (p *Parser) At(index int) (string, bool) {
 	if index < len(p.positional) {
 		return p.positional[index], true
 	}
@@ -167,7 +164,7 @@ func (p *ArgsParser) At(index int) (string, bool) {
 // Options returns the parsed options in the form of string-slice.
 //
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) Options() []string {
+func (p *Parser) Options() []string {
 	return p.options
 }
 
@@ -177,11 +174,20 @@ func (p *ArgsParser) Options() []string {
 //			// display help message!
 //		}
 //
+// HasOption also supports alias names lookup, example:
+//
+//		if parser.HasOption("--help", "-h") {
+//			// display help message!
+//		}
+//
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) HasOption(option string) bool {
+func (p *Parser) HasOption(option string, alts ...string) bool {
+	names := append(alts, option)
 	for _, opt := range p.options {
-		if opt == option {
-			return true
+		for _, name := range names {
+			if opt == name {
+				return true
+			}
 		}
 	}
 	return false
@@ -191,7 +197,7 @@ func (p *ArgsParser) HasOption(option string) bool {
 // the form of a slice of key-value pairs.
 //
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) Args() []map[string]string {
+func (p *Parser) Args() []map[string]string {
 	return p.args
 }
 
@@ -210,7 +216,7 @@ func (p *ArgsParser) Args() []map[string]string {
 //		names := parser.Get("--name", "-n")
 //
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) Get(name string, alts ...string) []string {
+func (p *Parser) Get(name string, alts ...string) []string {
 	names := append(alts, name)
 	args := make([]string, 0)
 	for _, name := range names {
@@ -240,7 +246,7 @@ func (p *ArgsParser) Get(name string, alts ...string) []string {
 //		names := parser.GetString("--name", "-n")
 //
 // Make sure to call `Parse()` before using this function.
-func (p *ArgsParser) GetString(name string, alts ...string) (string, bool) {
+func (p *Parser) GetString(name string, alts ...string) (string, bool) {
 	names := append(alts, name)
 	for i := len(p.args) - 1; i >= 0; i-- {
 		for _, name := range names {
@@ -255,7 +261,7 @@ func (p *ArgsParser) GetString(name string, alts ...string) (string, bool) {
 
 // firstPair is a helper function that returns the first key-value
 // of the given key-value map.
-func (p *ArgsParser) firstPair(m map[string]string) (string, string) {
+func (p *Parser) firstPair(m map[string]string) (string, string) {
 	for k, v := range m {
 		return k, v
 	}
