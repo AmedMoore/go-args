@@ -13,11 +13,11 @@ var testArgs = []string{
 	"--opt0", "--opt1", "--opt2", "--opt3", "--opt4", "--opt5",
 
 	// argument aliases
-	"-g", "val0", "-h", "val1", "-i", "val2",
+	"-g", "val0", "-h", "val1", "-i", "2",
 
 	// arguments
 	"--arg0", "val0", "--arg1", "val1", "--arg2", "val2",
-	"--arg0", "val3", "--arg1", "val4", "--arg2", "val5",
+	"--arg0", "val3", "--arg1", "val4", "--arg2", "5",
 }
 
 func Test_ArgsParser_Parse(t *testing.T) {
@@ -74,15 +74,27 @@ func Test_ArgsParser_Parse(t *testing.T) {
 	}
 
 	// test value of argument '-h'
-	h, exist := parser.GetString("-h")
+	h, exist := parser.LookupString("-h")
 	if !exist || h != "val1" {
-		t.Errorf("parser.GetString(\"-h\") = \"%s\"; want \"val1\"", h)
+		t.Errorf("parser.LookupString(\"-h\") = \"%s\"; want \"val1\"", h)
 	}
 
 	// test value of argument '--arg1'
-	arg1, exist := parser.GetString("--arg1")
+	arg1, exist := parser.LookupString("--arg1")
 	if !exist || arg1 != "val4" {
-		t.Errorf("parser.GetString(\"--arg1\") = \"%s\"; want \"val4\"", arg1)
+		t.Errorf("parser.LookupString(\"--arg1\") = \"%s\"; want \"val4\"", arg1)
+	}
+
+	// test value of argument '-i'
+	i, exist := parser.LookupInt("-i")
+	if !exist || i != 2 {
+		t.Errorf("parser.LookupInt(\"-i\") = \"%d\"; want \"2\"", i)
+	}
+
+	// test value of argument '--arg2'
+	arg2, exist := parser.LookupInt("--arg2")
+	if !exist || arg2 != 5 {
+		t.Errorf("parser.LookupInt(\"--arg2\") = \"%d\"; want \"5\"", arg2)
 	}
 
 	// test multiple values of argument '--arg1'
@@ -92,9 +104,9 @@ func Test_ArgsParser_Parse(t *testing.T) {
 	}
 
 	// test alternative names lookup
-	alt, exists := parser.GetString("--missing", "-g")
+	alt, exists := parser.LookupString("--missing", "-g")
 	if !exists || alt != "val0" {
-		t.Errorf("parser.GetString(\"--missing\", \"-g\") = \"%s\"; want \"val0\"", alt)
+		t.Errorf("parser.LookupString(\"--missing\", \"-g\") = \"%s\"; want \"val0\"", alt)
 	}
 }
 
