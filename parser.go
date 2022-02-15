@@ -1,5 +1,9 @@
 package args
 
+import (
+	"strconv"
+)
+
 /*
 	Package args implements command-line arguments parsing.
 
@@ -230,8 +234,7 @@ func (p *Parser) Get(name string, alts ...string) []string {
 	return args
 }
 
-// GetString returns the value of the given argument name,
-// and a bool value indicates weither the argument exists.
+// GetString returns the value of the given argument name.
 //
 // If multiple values found with the same name, the first
 // one from the right will be returned, example:
@@ -241,22 +244,119 @@ func (p *Parser) Get(name string, alts ...string) []string {
 //		name := parser.GetString("--name")
 //		print(name) // baz
 //
-// GetString() allow alternative names lookup, example:
+// GetString() allow alternative name lookup, example:
 //
 //		names := parser.GetString("--name", "-n")
 //
 // Make sure to call `Parse()` before using this function.
-func (p *Parser) GetString(name string, alts ...string) (string, bool) {
+func (p *Parser) GetString(name string, alts ...string) string {
 	names := append(alts, name)
 	for i := len(p.args) - 1; i >= 0; i-- {
-		for _, name := range names {
+		for _, n := range names {
 			k, v := p.firstPair(p.args[i])
-			if k == name {
-				return v, true
+			if k == n {
+				return v
 			}
 		}
 	}
-	return "", false
+	return ""
+}
+
+// LookupString returns the value of the given argument name,
+// and a bool value indicates weither the argument exists.
+//
+// If multiple values found with the same name, the first
+// one from the right will be returned, example:
+//
+//		$ myapp --name foo --name bar --name baz
+//
+//		name, exists := parser.LookupString("--name")
+//		print(name)   // baz
+//		print(exists) // true
+//
+// LookupString() allow alternative name lookup, example:
+//
+//		$ myapp --age 30 -n bar
+//
+//		name, exists := parser.LookupString("--name", "-n")
+//		print(name)   // bar
+//		print(exists) // true
+//
+// Make sure to call `Parse()` before using this function.
+func (p *Parser) LookupString(name string, alts ...string) (string, bool) {
+	v := p.GetString(name, alts...)
+	return v, v != ""
+}
+
+// GetInt returns the value of the given argument name.
+//
+// If multiple values found with the same name, the first
+// one from the right will be returned, example:
+//
+//		$ myapp --age 18 --age 21 --age 30
+//
+//		age := parser.GetInt("--age")
+//		print(age) // 30
+//
+// GetInt() allow alternative age lookup, example:
+//
+//		$ myapp --name foo -a 30
+//
+//		age := parser.LookupString("--age", "-a")
+//		print(age) // 30
+//
+// GetInt() returns -1 If argument was not found.
+//
+// GetInt() panics if the argument was found but
+//          was an invalid int value.
+//
+// Make sure to call `Parse()` before using this function.
+func (p *Parser) GetInt(name string, alts ...string) int64 {
+	names := append(alts, name)
+	for i := len(p.args) - 1; i >= 0; i-- {
+		for _, n := range names {
+			k, v := p.firstPair(p.args[i])
+			if k == n {
+				val, err := strconv.Atoi(v)
+				if err != nil {
+					panic(err)
+				}
+				return int64(val)
+			}
+		}
+	}
+	return -1
+}
+
+// LookupInt returns the value of the given argument name,
+// and a bool value indicates weither the argument exists.
+//
+// If multiple values found with the same name, the first
+// one from the right will be returned, example:
+//
+//		$ myapp --age 18 --age 21 --age 30
+//
+//		age, exists := parser.GetInt("--age")
+//		print(age)    // 30
+//		print(exists) // true
+//
+// LookupInt() allow alternative name lookup, example:
+//
+//		$ myapp --name foo -a 30
+//
+//		age, exists := parser.LookupInt("--age", "-a")
+//		print(age)    // 30
+//		print(exists) // true
+//
+// LookupInt() returns -1 If argument was not found.
+//
+// LookupInt() panics if the argument was found but
+//          was an invalid int value.
+//
+// Make sure to call `Parse()` before using this function.
+func (p *Parser) LookupInt(name string, alts ...string) (int64, bool) {
+	v := p.GetInt(name, alts...)
+	return v, v != -1
 }
 
 // firstPair is a helper function that returns the first key-value
