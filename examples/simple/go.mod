@@ -1,7 +1,7 @@
-module github.com/akaahmedkamal/go-args/examples/simple
+module github.com/ahmedmkamal/go-args/examples/simple
 
 go 1.17
 
-require github.com/akaahmedkamal/go-args v0.0.0
+require github.com/akaahmedkamal/go-args v0.5.0
 
-replace github.com/akaahmedkamal/go-args => ../..
+replace github.com/ahmedmkamal/go-args => ../..

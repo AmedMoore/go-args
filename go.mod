@@ -1,3 +1,3 @@
-module github.com/akaahmedkamal/go-args
+module github.com/ahmedmkamal/go-args
 
 go 1.17
