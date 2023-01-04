@@ -7,7 +7,7 @@ Construct a new parser using `args.NewParser()`.
 This constructs a new `ArgsParser` struct and returns a pointer to it:
 
 ```go
-import "github.com/skyareas/go-args"
+import "github.com/ahmedmkamal/go-args"
 parser := args.NewParser()
 ```
 
@@ -93,11 +93,11 @@ One or two minus signs (hyphens) may be used; they are equivalent.
   $ go test -bench .
   goos: windows
   goarch: amd64
-  pkg: github.com/skyareas/go-args
+  pkg: github.com/ahmedmkamal/go-args
   cpu: Intel(R) Core(TM) i7-10870H CPU @ 2.20GHz
   Benchmark_ArgsParser_Parse-16           1000000000
   PASS
-  ok      github.com/skyareas/go-args        0.025s
+  ok      github.com/ahmedmkamal/go-args        0.025s
   ```
 
 - On Mac:
@@ -106,10 +106,10 @@ One or two minus signs (hyphens) may be used; they are equivalent.
   $ go test -bench .
   goos: darwin
   goarch: arm64
-  pkg: github.com/skyareas/go-args
+  pkg: github.com/ahmedmkamal/go-args
   Benchmark_ArgsParser_Parse-8      1000000000      0.0000110 ns/op
   PASS
-  ok      github.com/skyareas/go-args        0.729s
+  ok      github.com/ahmedmkamal/go-args        0.729s
   ```
 
 ## TODO
@@ -125,4 +125,4 @@ One or two minus signs (hyphens) may be used; they are equivalent.
 
 This package is licensed under the [MIT License][license] feel free to use it as you want!
 
-[license]: https://github.com/skyareas/go-args/blob/main/LICENSE
+[license]: https://github.com/ahmedmkamal/go-args/blob/main/LICENSE

@@ -12,7 +12,7 @@ import (
 	Construct a new parser using args.NewParser()
 
 	This constructs a new Parser struct and returns a pointer to it:
-		import "github.com/skyareas/go-args"
+		import "github.com/ahmedmkamal/go-args"
 		parser := args.NewParser()
 	You can pass the arguments slice to be parsed to this function.
 		parser := args.NewParser(os.Args[1:])
@@ -85,7 +85,7 @@ type Parser struct {
 // Optionally you can pass the arguments slice
 // to be parsed to this function, example:
 //
-//		parser := args.NewParser(os.Args[1:])
+//	parser := args.NewParser(os.Args[1:])
 //
 // Please note that you have to pass the arguments
 // slice to either this or the `Parse()` function.
@@ -103,14 +103,14 @@ func NewParser(args ...[]string) *Parser {
 // Optionally you can pass the arguments slice
 // to be parsed to this function, example:
 //
-//		parser := args.NewParser()
-//		parser.Parse(os.Args[1:])
+//	parser := args.NewParser()
+//	parser.Parse(os.Args[1:])
 //
 // Please note that arguments passed to this function
 // will be ignored if you declared the parser struct
 // with initial arguments, like:
 //
-//		parser := args.NewParser(os.Args[1:])
+//	parser := args.NewParser(os.Args[1:])
 func (p *Parser) Parse(args ...[]string) error {
 	if len(args) > 0 && len(p.rawArgs) == 0 {
 		p.rawArgs = args[0]
@@ -174,15 +174,15 @@ func (p *Parser) Options() []string {
 
 // HasOption asks if a specific option was provided, example:
 //
-//		if parser.HasOption("-h") {
-//			// display help message!
-//		}
+//	if parser.HasOption("-h") {
+//		// display help message!
+//	}
 //
 // HasOption also supports alias names lookup, example:
 //
-//		if parser.HasOption("--help", "-h") {
-//			// display help message!
-//		}
+//	if parser.HasOption("--help", "-h") {
+//		// display help message!
+//	}
 //
 // Make sure to call `Parse()` before using this function.
 func (p *Parser) HasOption(option string, alts ...string) bool {
@@ -208,16 +208,16 @@ func (p *Parser) Args() []map[string]string {
 // Get return all values provided with the given name.
 // example:
 //
-//		$ myapp --name foo --name bar --name baz
+//	$ myapp --name foo --name bar --name baz
 //
-//		names := parser.Get("--name")
-//		for _, name := range names {
-//			print(name)
-//		}
+//	names := parser.Get("--name")
+//	for _, name := range names {
+//		print(name)
+//	}
 //
 // Get() allow alternative names lookup, example:
 //
-//		names := parser.Get("--name", "-n")
+//	names := parser.Get("--name", "-n")
 //
 // Make sure to call `Parse()` before using this function.
 func (p *Parser) Get(name string, alts ...string) []string {
@@ -239,14 +239,14 @@ func (p *Parser) Get(name string, alts ...string) []string {
 // If multiple values found with the same name, the first
 // one from the right will be returned, example:
 //
-//		$ myapp --name foo --name bar --name baz
+//	$ myapp --name foo --name bar --name baz
 //
-//		name := parser.GetString("--name")
-//		print(name) // baz
+//	name := parser.GetString("--name")
+//	print(name) // baz
 //
 // GetString() allow alternative name lookup, example:
 //
-//		names := parser.GetString("--name", "-n")
+//	names := parser.GetString("--name", "-n")
 //
 // Make sure to call `Parse()` before using this function.
 func (p *Parser) GetString(name string, alts ...string) string {
@@ -268,19 +268,19 @@ func (p *Parser) GetString(name string, alts ...string) string {
 // If multiple values found with the same name, the first
 // one from the right will be returned, example:
 //
-//		$ myapp --name foo --name bar --name baz
+//	$ myapp --name foo --name bar --name baz
 //
-//		name, exists := parser.LookupString("--name")
-//		print(name)   // baz
-//		print(exists) // true
+//	name, exists := parser.LookupString("--name")
+//	print(name)   // baz
+//	print(exists) // true
 //
 // LookupString() allow alternative name lookup, example:
 //
-//		$ myapp --age 30 -n bar
+//	$ myapp --age 30 -n bar
 //
-//		name, exists := parser.LookupString("--name", "-n")
-//		print(name)   // bar
-//		print(exists) // true
+//	name, exists := parser.LookupString("--name", "-n")
+//	print(name)   // bar
+//	print(exists) // true
 //
 // Make sure to call `Parse()` before using this function.
 func (p *Parser) LookupString(name string, alts ...string) (string, bool) {
@@ -293,22 +293,23 @@ func (p *Parser) LookupString(name string, alts ...string) (string, bool) {
 // If multiple values found with the same name, the first
 // one from the right will be returned, example:
 //
-//		$ myapp --age 18 --age 21 --age 30
+//	$ myapp --age 18 --age 21 --age 30
 //
-//		age := parser.GetInt("--age")
-//		print(age) // 30
+//	age := parser.GetInt("--age")
+//	print(age) // 30
 //
 // GetInt() allow alternative age lookup, example:
 //
-//		$ myapp --name foo -a 30
+//	$ myapp --name foo -a 30
 //
-//		age := parser.LookupString("--age", "-a")
-//		print(age) // 30
+//	age := parser.LookupString("--age", "-a")
+//	print(age) // 30
 //
 // GetInt() returns -1 If argument was not found.
 //
 // GetInt() panics if the argument was found but
-//          was an invalid int value.
+//
+//	was an invalid int value.
 //
 // Make sure to call `Parse()` before using this function.
 func (p *Parser) GetInt(name string, alts ...string) int64 {
@@ -334,24 +335,25 @@ func (p *Parser) GetInt(name string, alts ...string) int64 {
 // If multiple values found with the same name, the first
 // one from the right will be returned, example:
 //
-//		$ myapp --age 18 --age 21 --age 30
+//	$ myapp --age 18 --age 21 --age 30
 //
-//		age, exists := parser.GetInt("--age")
-//		print(age)    // 30
-//		print(exists) // true
+//	age, exists := parser.GetInt("--age")
+//	print(age)    // 30
+//	print(exists) // true
 //
 // LookupInt() allow alternative name lookup, example:
 //
-//		$ myapp --name foo -a 30
+//	$ myapp --name foo -a 30
 //
-//		age, exists := parser.LookupInt("--age", "-a")
-//		print(age)    // 30
-//		print(exists) // true
+//	age, exists := parser.LookupInt("--age", "-a")
+//	print(age)    // 30
+//	print(exists) // true
 //
 // LookupInt() returns -1 If argument was not found.
 //
 // LookupInt() panics if the argument was found but
-//          was an invalid int value.
+//
+//	was an invalid int value.
 //
 // Make sure to call `Parse()` before using this function.
 func (p *Parser) LookupInt(name string, alts ...string) (int64, bool) {

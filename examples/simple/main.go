@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/skyareas/go-args"
+	"github.com/ahmedmkamal/go-args"
 )
 
 func main() {
