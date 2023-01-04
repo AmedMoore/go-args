@@ -20,7 +20,7 @@ var testArgs = []string{
 	"--arg0", "val3", "--arg1", "val4", "--arg2", "5",
 }
 
-func Test_ArgsParser_Parse(t *testing.T) {
+func Test_Parser_Parse(t *testing.T) {
 	parser := NewParser(testArgs)
 	err := parser.Parse()
 	if err != nil {
@@ -110,7 +110,7 @@ func Test_ArgsParser_Parse(t *testing.T) {
 	}
 }
 
-func Benchmark_ArgsParser_Parse(b *testing.B) {
+func Benchmark_Parser_Parse(b *testing.B) {
 	parser := NewParser(testArgs)
 	err := parser.Parse()
 	if err != nil {

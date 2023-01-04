@@ -4,7 +4,7 @@ Package `args` implements command-line arguments parsing.
 
 Construct a new parser using `args.NewParser()`.
 
-This constructs a new `ArgsParser` struct and returns a pointer to it:
+This constructs a new `Parser` struct and returns a pointer to it:
 
 ```go
 import "github.com/ahmedmkamal/go-args"
@@ -95,7 +95,7 @@ One or two minus signs (hyphens) may be used; they are equivalent.
   goarch: amd64
   pkg: github.com/ahmedmkamal/go-args
   cpu: Intel(R) Core(TM) i7-10870H CPU @ 2.20GHz
-  Benchmark_ArgsParser_Parse-16           1000000000
+  Benchmark_Parser_Parse-16           1000000000
   PASS
   ok      github.com/ahmedmkamal/go-args        0.025s
   ```
@@ -107,7 +107,7 @@ One or two minus signs (hyphens) may be used; they are equivalent.
   goos: darwin
   goarch: arm64
   pkg: github.com/ahmedmkamal/go-args
-  Benchmark_ArgsParser_Parse-8      1000000000      0.0000110 ns/op
+  Benchmark_Parser_Parse-8      1000000000      0.0000110 ns/op
   PASS
   ok      github.com/ahmedmkamal/go-args        0.729s
   ```
@@ -119,7 +119,7 @@ One or two minus signs (hyphens) may be used; they are equivalent.
 - [ ] Support for the Windows (`/opt`, `/arg val`, and `/arg=val`) syntax.
 - [ ] Maybe add auto-cast for argument values? like `GetString() string`, `GetInt() int`, and `GetBool() bool`, etc...
 - [x] Allow alternative names lookup in argument accessor functions (i.e. `GetString("-h", "--help")`)
-- [x] Add type alias `Parser` for the struct `ArgsParser`.
+- [x] ~~Add type alias `Parser` for the struct `ArgsParser`.~~
 
 ## License
 
