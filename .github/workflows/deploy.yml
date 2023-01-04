@@ -1,31 +1,35 @@
 name: Release
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - Test
     branches:
       - main
+    types:
+      - completed
 
 jobs:
-  build_release:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    name: Build and Deploy Release
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
+
       - uses: actions/setup-go@v2
         with:
-          go-version: "^1.19"
-      - run: go version
-      - run: make test
-      - id: previoustag
+          go-version: '^1.19.3'
+
+      - id: previous_tag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
         with:
           fallback: 0.1.0
+
       - id: semvers
         uses: "WyriHaximus/github-action-next-semvers@v1"
         with:
-          version: ${{ steps.previoustag.outputs.tag }}
+          version: ${{ steps.previous_tag.outputs.tag }}
+
       - id: release
         uses: actions/create-release@latest
         env:
