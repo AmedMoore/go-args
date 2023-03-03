@@ -12,7 +12,7 @@ import (
 	Construct a new parser using args.NewParser()
 
 	This constructs a new Parser struct and returns a pointer to it:
-		import "github.com/ahmedmkamal/go-args"
+		import "github.com/amedmoore/go-args"
 		parser := args.NewParser()
 	You can pass the arguments slice to be parsed to this function.
 		parser := args.NewParser(os.Args[1:])
