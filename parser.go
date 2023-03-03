@@ -90,11 +90,16 @@ type Parser struct {
 // Please note that you have to pass the arguments
 // slice to either this or the `Parse()` function.
 func NewParser(args ...[]string) *Parser {
-	var rawArgs []string
+	rawArgs := make([]string, 0)
 	if len(args) > 0 {
 		rawArgs = args[0]
 	}
-	return &Parser{rawArgs: rawArgs}
+	return &Parser{
+		rawArgs:    rawArgs,
+		positional: make([]string, 0),
+		options:    make([]string, 0),
+		args:       make([]map[string]string, 0),
+	}
 }
 
 // Parse parses the command-line arguments and store,
